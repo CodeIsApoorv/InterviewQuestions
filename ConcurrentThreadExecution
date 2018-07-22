@@ -1,0 +1,8 @@
+package cldfw.app;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class ResourceLock {
+	public volatile int flag = 1;
+	AtomicInteger aI = new AtomicInteger(1);
+}
