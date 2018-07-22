@@ -1,0 +1,76 @@
+package cldfw.app;
+
+class Main extends Thread{
+	ResourceLock lock ;
+	Main(ResourceLock lock){
+		this.lock = lock ;
+	}
+	
+	public void run(){
+		try{
+			synchronized (lock) {
+				while(lock.flag!=1){
+                     lock.wait();
+                }
+				for(int i= 0 ; i <10; i++){
+					System.out.println("Demo.."+i);
+				}
+				Thread.sleep(1000);
+                lock.flag = 2;
+                lock.notifyAll();
+			}
+		}catch(InterruptedException e){
+			 System.out.println("Exception 1 :"+e.getMessage());
+		}
+	}
+}
+class ThreadDemo2 extends Thread{
+	ResourceLock lock;
+	 
+	ThreadDemo2(ResourceLock lock){
+        this.lock = lock;
+    }
+	public void run(){
+		try{
+			synchronized (lock) {
+				while(lock.flag!=2){
+                    lock.wait();
+                }
+				for(int i= 0 ; i <10; i++){
+					System.out.println("Integr = "+i*i);
+				}
+				Thread.sleep(1000);
+				lock.flag = 3;
+                lock.notifyAll();
+			}
+		}catch(InterruptedException e){
+			
+		}
+	}
+}
+class ThreadDemo3 extends Thread{
+	ResourceLock lock;
+	 
+	ThreadDemo3(ResourceLock lock){
+        this.lock = lock;
+    }
+	public void run(){
+		try{
+			synchronized (lock) {
+				while(lock.flag != 3){
+					lock.wait();
+				}
+				for(int i= 0 ; i <10; i++){
+					System.out.println("SUM = "+i+i);
+				}
+				Thread.sleep(1000);
+				lock.flag = 1;
+				lock.notifyAll();
+			}
+			
+		}catch(InterruptedException e){
+			
+		}
+	}
+}
+
